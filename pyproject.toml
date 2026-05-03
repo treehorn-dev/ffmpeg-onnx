@@ -1,0 +1,16 @@
+[project]
+name = "ffmpeg-onnx"
+version = "0.1.0"
+description = "Docker image and CLI for NudeNet video inference and visualization"
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9,<10",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+cache_dir = "/tmp/ffmpeg-onnx-pytest-cache"
+testpaths = ["tests"]
+

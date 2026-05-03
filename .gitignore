@@ -1,0 +1,13 @@
+.DS_Store
+.pytest_cache/
+.venv/
+__pycache__/
+*.pyc
+
+frames/
+*.mp4
+*.wmv
+*.jsonl
+*.onnx
+labels.txt
+viz.mp4

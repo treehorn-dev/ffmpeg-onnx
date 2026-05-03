@@ -1,0 +1,5 @@
+FROM ffmpeg-onnx-base
+
+COPY models/nudenet.onnx /models/nudenet.onnx
+COPY labels.txt /models/labels.txt
+

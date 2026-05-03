@@ -9,5 +9,6 @@ frames/
 *.wmv
 *.jsonl
 *.onnx
-labels.txt
 viz.mp4
+models/*
+!models/.gitkeep

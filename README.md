@@ -13,6 +13,33 @@ The container exposes a small JSON-first CLI through `nn`:
 docker build -t ffmpeg-onnx .
 ```
 
+## Release-Backed Assets
+
+The base `Dockerfile` keeps the original mounted-model workflow.
+
+For CI or a bundled runtime image, fetch the model assets from a GitHub release into `models/` first:
+
+```bash
+./scripts/fetch-release-assets.sh nudenet-assets-v1
+```
+
+That uses:
+
+```bash
+gh release download nudenet-assets-v1 -R treehorn-dev/ffmpeg-onnx -D models -p nudenet.onnx -p labels.txt
+```
+
+Then build the base image and the baked-model variant:
+
+```bash
+docker build -t ffmpeg-onnx-base .
+docker build -t ffmpeg-onnx:baked -f Dockerfile.baked .
+```
+
+The baked variant copies:
+- `models/nudenet.onnx`
+- `labels.txt` to `/models/labels.txt`
+
 ## What The Image Contains
 
 - Custom FFmpeg and FFprobe binaries

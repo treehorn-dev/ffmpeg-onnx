@@ -37,7 +37,8 @@ def test_repo_has_pytest_harness() -> None:
 def test_baked_model_dockerfile_copies_release_backed_assets() -> None:
     text = Path("Dockerfile.baked").read_text()
 
-    assert "FROM ffmpeg-onnx-base" in text
+    assert "ARG FFMPEG_ONNX_BASE_IMAGE=ffmpeg-onnx-base" in text
+    assert "FROM ${FFMPEG_ONNX_BASE_IMAGE}" in text
     assert "COPY models/nudenet.onnx /models/nudenet.onnx" in text
     assert "COPY labels.txt /models/labels.txt" in text
 

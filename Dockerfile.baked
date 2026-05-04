@@ -1,5 +1,5 @@
-FROM ffmpeg-onnx-base
+ARG FFMPEG_ONNX_BASE_IMAGE=ffmpeg-onnx-base
+FROM ${FFMPEG_ONNX_BASE_IMAGE}
 
 COPY models/nudenet.onnx /models/nudenet.onnx
 COPY labels.txt /models/labels.txt
-

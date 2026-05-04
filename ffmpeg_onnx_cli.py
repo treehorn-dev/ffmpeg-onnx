@@ -35,7 +35,17 @@ def main(argv: list[str] | None = None, executable: str = "ffmpeg-onnx") -> int:
     try:
         args = parser.parse_args(argv)
     except SystemExit:
-        emit(error_response(raw, {"path": argv[:1], "options": {}, "flags": {}}, "INVALID_ARGUMENTS", "Invalid command arguments.", "Run the root command to inspect supported ffmpeg-onnx commands.", [{"command": executable, "description": "Show the root command tree."}], executable))
+        emit(
+            error_response(
+                raw,
+                {"path": argv[:1], "options": {}, "flags": {}},
+                "INVALID_ARGUMENTS",
+                "Invalid command arguments.",
+                "Run the root command to inspect supported ffmpeg-onnx commands.",
+                [{"command": executable, "description": "Show the root command tree."}],
+                executable,
+            )
+        )
         return 2
 
     if args.command == "process":
@@ -50,10 +60,38 @@ def main(argv: list[str] | None = None, executable: str = "ffmpeg-onnx") -> int:
             "flags": {},
         }
         if args.model not in SUPPORTED_MODELS:
-            emit(error_response(raw, parsed, "UNSUPPORTED_MODEL", f"Unsupported model: {args.model}", "Use --model nudenet. That is the only supported model right now.", [{"command": f"{executable} process --model nudenet --input {args.input}", "description": "Run the supported NudeNet processing path."}], executable))
+            emit(
+                error_response(
+                    raw,
+                    parsed,
+                    "UNSUPPORTED_MODEL",
+                    f"Unsupported model: {args.model}",
+                    "Use --model nudenet. That is the only supported model right now.",
+                    [
+                        {
+                            "command": f"{executable} process --model nudenet --input {args.input}",
+                            "description": "Run the supported NudeNet processing path.",
+                        }
+                    ],
+                    executable,
+                )
+            )
             return 1
         result = run_process_command(parsed)
-        emit(success_response(raw, parsed, result, [{"command": f"{executable} process --model nudenet --input {args.input}", "description": "Re-run the supported NudeNet processing path."}], executable))
+        emit(
+            success_response(
+                raw,
+                parsed,
+                result,
+                [
+                    {
+                        "command": f"{executable} process --model nudenet --input {args.input}",
+                        "description": "Re-run the supported NudeNet processing path.",
+                    }
+                ],
+                executable,
+            )
+        )
         return 0
 
     emit(root_payload(raw, executable))
@@ -64,21 +102,28 @@ def main_entry() -> None:
     raise SystemExit(main(sys.argv[1:], executable="ffmpeg-onnx"))
 
 
-def nn_entry() -> None:
-    raise SystemExit(main(sys.argv[1:], executable="nn"))
-
-
 def root_payload(raw: str, executable: str) -> dict[str, Any]:
-    return success_response(raw, {"path": [], "options": {}, "flags": {}}, {
-        "description": "ffmpeg-onnx CLI",
-        "commands": [
+    return success_response(
+        raw,
+        {"path": [], "options": {}, "flags": {}},
+        {
+            "description": "ffmpeg-onnx CLI",
+            "commands": [
+                {
+                    "name": "process",
+                    "description": "Run the supported ONNX video processing path for a baked model.",
+                    "usage": f"{executable} process --model nudenet --input <video>",
+                }
+            ],
+        },
+        [
             {
-                "name": "process",
-                "description": "Run the supported ONNX video processing path for a baked model.",
-                "usage": f"{executable} process --model nudenet --input <video>",
+                "command": f"{executable} process --model nudenet --input /path/to/video.mp4",
+                "description": "Process one video with the supported NudeNet model.",
             }
         ],
-    }, [{"command": f"{executable} process --model nudenet --input /path/to/video.mp4", "description": "Process one video with the supported NudeNet model."}], executable)
+        executable,
+    )
 
 
 def run_process_command(parsed: dict[str, Any]) -> dict[str, Any]:
@@ -93,7 +138,13 @@ def run_process_command(parsed: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def success_response(raw: str, parsed: dict[str, Any], result: dict[str, Any], next_actions: list[dict[str, str]], executable: str) -> dict[str, Any]:
+def success_response(
+    raw: str,
+    parsed: dict[str, Any],
+    result: dict[str, Any],
+    next_actions: list[dict[str, str]],
+    executable: str,
+) -> dict[str, Any]:
     return {
         "ok": True,
         "command": {
@@ -110,7 +161,15 @@ def success_response(raw: str, parsed: dict[str, Any], result: dict[str, Any], n
     }
 
 
-def error_response(raw: str, parsed: dict[str, Any], code: str, message: str, fix: str, next_actions: list[dict[str, str]], executable: str) -> dict[str, Any]:
+def error_response(
+    raw: str,
+    parsed: dict[str, Any],
+    code: str,
+    message: str,
+    fix: str,
+    next_actions: list[dict[str, str]],
+    executable: str,
+) -> dict[str, Any]:
     return {
         "ok": False,
         "command": {

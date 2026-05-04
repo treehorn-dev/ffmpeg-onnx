@@ -15,7 +15,6 @@ dev = [
 
 [project.scripts]
 ffmpeg-onnx = "ffmpeg_onnx_cli:main_entry"
-nn = "ffmpeg_onnx_cli:nn_entry"
 
 [tool.setuptools]
 py-modules = ["ffmpeg_onnx_cli", "nn", "process_nudenet", "viz_nudenet"]

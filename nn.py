@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import json
 
-from ffmpeg_onnx_cli import nn_entry
-
 
 def parse_process_summary(stdout: str):
     stdout = (stdout or "").strip()
@@ -23,7 +21,3 @@ def build_process_result(output_file: str, summary=None):
     if summary:
         result["metrics"] = summary
     return result
-
-
-if __name__ == "__main__":
-    nn_entry()

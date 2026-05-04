@@ -1,7 +1,11 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "ffmpeg-onnx"
 version = "0.1.0"
-description = "Docker image and CLI for NudeNet video inference and visualization"
+description = "Docker image and CLI for ONNX-backed video inference workflows"
 requires-python = ">=3.11"
 
 [project.optional-dependencies]
@@ -9,8 +13,14 @@ dev = [
     "pytest>=9,<10",
 ]
 
+[project.scripts]
+ffmpeg-onnx = "ffmpeg_onnx_cli:main_entry"
+nn = "ffmpeg_onnx_cli:nn_entry"
+
+[tool.setuptools]
+py-modules = ["ffmpeg_onnx_cli", "nn", "process_nudenet", "viz_nudenet"]
+
 [tool.pytest.ini_options]
 addopts = "-q"
 cache_dir = "/tmp/ffmpeg-onnx-pytest-cache"
 testpaths = ["tests"]
-

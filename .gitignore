@@ -12,3 +12,5 @@ frames/
 viz.mp4
 models/*
 !models/.gitkeep
+
+*.egg-info/

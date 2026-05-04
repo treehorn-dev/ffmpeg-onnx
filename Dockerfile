@@ -6,12 +6,12 @@ ARG TARGETARCH
 RUN if [ "$TARGETARCH" = "arm64" ]; then \
       UBUNTU_MIRROR="http://ports.ubuntu.com/ubuntu-ports"; \
     else \
-      UBUNTU_MIRROR="http://archive.ubuntu.com/ubuntu"; \
+      UBUNTU_MIRROR="https://archive.ubuntu.com/ubuntu"; \
     fi && \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy main restricted universe multiverse" > /etc/apt/sources.list && \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy-security main restricted universe multiverse" >> /etc/apt/sources.list && \
-    apt-get update && apt-get install -y \
+    apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update && apt-get install -y \
     wget tar cmake git build-essential \
     pkg-config libssl-dev libfreetype6-dev \
     unzip libopenblas-dev libusb-1.0-0-dev
@@ -85,12 +85,12 @@ ARG TARGETARCH
 RUN if [ "$TARGETARCH" = "arm64" ]; then \
       UBUNTU_MIRROR="http://ports.ubuntu.com/ubuntu-ports"; \
     else \
-      UBUNTU_MIRROR="http://archive.ubuntu.com/ubuntu"; \
+      UBUNTU_MIRROR="https://archive.ubuntu.com/ubuntu"; \
     fi && \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy main restricted universe multiverse" > /etc/apt/sources.list && \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy-security main restricted universe multiverse" >> /etc/apt/sources.list && \
-    apt-get update && apt-get install -y --no-install-recommends \
+    apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update && apt-get install -y --no-install-recommends \
     libgomp1 libopenblas0 libusb-1.0-0 \
     python3 python3-pip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*

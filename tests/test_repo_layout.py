@@ -34,6 +34,15 @@ def test_repo_has_pytest_harness() -> None:
     assert "[tool.pytest.ini_options]" in text
 
 
+def test_main_dockerfile_is_not_hardcoded_to_arm_ports_mirror() -> None:
+    text = Path("Dockerfile").read_text()
+
+    assert "ARG TARGETARCH" in text
+    assert "ports.ubuntu.com/ubuntu-ports" in text
+    assert "archive.ubuntu.com/ubuntu" in text
+    assert 'if [ "$TARGETARCH" = "arm64" ]' in text
+
+
 def test_baked_model_dockerfile_copies_release_backed_assets() -> None:
     text = Path("Dockerfile.baked").read_text()
 

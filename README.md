@@ -2,10 +2,9 @@
 
 Docker image for running NudeNet inference over video and emitting JSONL detections, plus an optional visualization step.
 
-The container exposes a small JSON-first CLI through `nn`:
+The container exposes a small JSON-first CLI through `ffmpeg-onnx`:
 
-- `nn process`: run inference and write a `.jsonl` file
-- `nn viz`: render detections back onto a video
+- `ffmpeg-onnx process`: run inference and write a `.jsonl` file
 
 ## Build
 
@@ -44,7 +43,7 @@ The baked variant copies:
 
 - Custom FFmpeg and FFprobe binaries
 - OpenVINO runtime
-- Python CLI entrypoint: `nn`
+- Python CLI entrypoint: `ffmpeg-onnx`
 
 The image does **not** bundle `nudenet.onnx`. Mount the model file when you run `process`.
 
@@ -68,7 +67,7 @@ The command returns a JSON envelope like:
 ```json
 {
   "ok": true,
-  "command": "nn process --video /work/input.mp4 --model /models/nudenet.onnx --output /work/input.mp4.bbox.jsonl",
+  "command": "ffmpeg-onnx process --video /work/input.mp4 --model /models/nudenet.onnx --output /work/input.mp4.bbox.jsonl",
   "result": {
     "output_file": "/work/input.mp4.bbox.jsonl",
     "status": "completed",
@@ -82,8 +81,8 @@ The command returns a JSON envelope like:
   },
   "next_actions": [
     {
-      "command": "nn viz --video /work/input.mp4 --jsonl /work/input.mp4.bbox.jsonl",
-      "description": "Visualize detections on the video"
+      "command": "ffmpeg-onnx process --video /work/input.mp4 --model /models/nudenet.onnx --output /work/input.mp4.bbox.jsonl",
+      "description": "Run the supported NudeNet processing path again"
     }
   ]
 }
@@ -125,29 +124,6 @@ Notes:
 - Video decoding and frame sampling are done through FFmpeg, not `cv2.VideoCapture`.
 - The JSONL only contains frames with non-empty detections.
 - The JSON envelope includes throughput metrics under `result.metrics`.
-
-### `viz`
-
-Arguments:
-
-- `--video`: input video path inside the container
-- `--jsonl`: JSONL detections file produced by `process`
-- `--output`: rendered video output path, default `viz.mp4`
-- `--limit`: max number of detection-bearing frames to render, default `100`
-
-Example:
-
-```bash
-docker run --rm \
-  -v /absolute/path/to/videos:/work \
-  --user "$(id -u):$(id -g)" \
-  ffmpeg-onnx viz \
-  --video /work/input.mp4 \
-  --jsonl /work/input.mp4.bbox.jsonl \
-  --output /work/input.viz.mp4
-```
-
-If you care about the rendered file, write it under `/work/...`. Using `/tmp/...` with `--rm` discards it when the container exits.
 
 ## Batch Processing
 

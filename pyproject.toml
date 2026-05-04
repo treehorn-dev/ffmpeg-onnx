@@ -17,7 +17,7 @@ dev = [
 ffmpeg-onnx = "ffmpeg_onnx_cli:main_entry"
 
 [tool.setuptools]
-py-modules = ["ffmpeg_onnx_cli", "nn", "process_nudenet", "viz_nudenet"]
+py-modules = ["ffmpeg_onnx_cli", "process_nudenet", "viz_nudenet"]
 
 [tool.pytest.ini_options]
 addopts = "-q"

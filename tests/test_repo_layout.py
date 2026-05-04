@@ -7,7 +7,7 @@ def test_repo_has_clean_minimal_layout() -> None:
     assert Path("README.md").exists()
     assert Path("labels.txt").exists()
     assert Path("models/.gitkeep").exists()
-    assert Path("nn.py").exists()
+    assert Path("ffmpeg_onnx_cli.py").exists()
     assert Path("process_nudenet.py").exists()
     assert Path("viz_nudenet.py").exists()
     assert Path("ffmpeg-8.1").is_dir()

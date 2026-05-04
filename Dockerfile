@@ -77,8 +77,8 @@ COPY --from=build /usr/local/openvino /usr/local/openvino
 
 COPY process_nudenet.py /usr/local/bin/process_nudenet.py
 COPY viz_nudenet.py /usr/local/bin/viz_nudenet.py
-COPY nn.py /usr/local/bin/nn
-RUN chmod +x /usr/local/bin/nn
+COPY ffmpeg_onnx_cli.py /usr/local/bin/ffmpeg-onnx
+RUN chmod +x /usr/local/bin/ffmpeg-onnx
 
 # Ensure loader finds libraries
 ENV LD_LIBRARY_PATH=/usr/local/libtorch/lib:/usr/local/openvino/runtime/lib/aarch64:/usr/local/openvino/runtime/3rdparty/tbb/lib
@@ -86,4 +86,4 @@ ENV PYTHONPATH=/usr/local/openvino/python
 ENV PATH="/usr/local/bin:${PATH}"
 
 WORKDIR /work
-ENTRYPOINT ["nn"]
+ENTRYPOINT ["ffmpeg-onnx"]

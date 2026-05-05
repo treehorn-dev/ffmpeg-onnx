@@ -7,8 +7,8 @@ RUN rm -f /models/nudenet.onnx /models/labels.txt
 
 RUN pip3 install --no-cache-dir --upgrade numpy opencv-python-headless openvino
 
-RUN ln -s /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/local/bin/ffmpeg && \
-    ln -s /usr/lib/jellyfin-ffmpeg/ffprobe /usr/local/bin/ffprobe
+RUN ln -sf /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/local/bin/ffmpeg && \
+    ln -sf /usr/lib/jellyfin-ffmpeg/ffprobe /usr/local/bin/ffprobe
 
 COPY process_nudenet.py /usr/local/bin/process_nudenet.py
 COPY viz_nudenet.py /usr/local/bin/viz_nudenet.py

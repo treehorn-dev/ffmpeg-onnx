@@ -43,6 +43,8 @@ def test_main_dockerfile_installs_pinned_jellyfin_ffmpeg_packages() -> None:
     assert "JELLYFIN_FFMPEG_VERSION" in text
     assert "rm -f /models/nudenet.onnx /models/labels.txt" in text
     assert "pip3 install --no-cache-dir --upgrade numpy opencv-python-headless openvino" in text
+    assert "ln -sf /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/local/bin/ffmpeg" in text
+    assert "ln -sf /usr/lib/jellyfin-ffmpeg/ffprobe /usr/local/bin/ffprobe" in text
     assert "./configure" not in text
     assert "make -j$(nproc) install" not in text
 

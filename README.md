@@ -41,8 +41,8 @@ The baked variant copies:
 
 ## What The Image Contains
 
-- Custom FFmpeg and FFprobe binaries
-- OpenVINO runtime
+- Jellyfin FFmpeg and FFprobe binaries from a pinned GitHub release package
+- OpenVINO Python runtime
 - Python CLI entrypoint: `ffmpeg-onnx`
 
 The image does **not** bundle `nudenet.onnx`. Mount the model file when you run `process`.

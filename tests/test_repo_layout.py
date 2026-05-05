@@ -34,17 +34,17 @@ def test_repo_has_pytest_harness() -> None:
     assert "[tool.pytest.ini_options]" in text
 
 
-def test_main_dockerfile_bootstraps_https_apt_before_ca_certificates_exist() -> None:
+def test_main_dockerfile_installs_pinned_jellyfin_ffmpeg_packages() -> None:
     text = Path("Dockerfile").read_text()
 
     assert "ARG TARGETARCH" in text
-    assert "ports.ubuntu.com/ubuntu-ports" in text
-    assert "archive.ubuntu.com/ubuntu" in text
-    assert 'if [ "$TARGETARCH" = "arm64" ]' in text
-    assert "https://archive.ubuntu.com/ubuntu" in text
-    assert "Acquire::https::Verify-Peer=false" in text
-    assert "Acquire::https::Verify-Host=false" in text
-    assert "ca-certificates" in text
+    assert "JELLYFIN_FFMPEG_VERSION" in text
+    assert "jellyfin-ffmpeg7_${JELLYFIN_FFMPEG_VERSION}-jammy_${TARGETARCH}.deb" in text
+    assert "github.com/jellyfin/jellyfin-ffmpeg/releases/download" in text
+    assert "apt-get install -y --fix-missing --no-install-recommends /tmp/jellyfin-ffmpeg7.deb" in text
+    assert "pip3 install --no-cache-dir numpy opencv-python-headless openvino" in text
+    assert "./configure" not in text
+    assert "make -j$(nproc) install" not in text
 
 
 def test_baked_model_dockerfile_copies_release_backed_assets() -> None:

@@ -11,8 +11,9 @@ RUN if [ "$TARGETARCH" = "arm64" ]; then \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy main restricted universe multiverse" > /etc/apt/sources.list && \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy-security main restricted universe multiverse" >> /etc/apt/sources.list && \
-    apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update && apt-get install -y \
-    wget tar cmake git build-essential \
+    apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o Acquire::https::Verify-Peer=false -o Acquire::https::Verify-Host=false update && \
+    apt-get install -y --fix-missing \
+    ca-certificates wget tar cmake git build-essential \
     pkg-config libssl-dev libfreetype6-dev \
     unzip libopenblas-dev libusb-1.0-0-dev
 
@@ -90,8 +91,9 @@ RUN if [ "$TARGETARCH" = "arm64" ]; then \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy main restricted universe multiverse" > /etc/apt/sources.list && \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb [trusted=yes] ${UBUNTU_MIRROR} jammy-security main restricted universe multiverse" >> /etc/apt/sources.list && \
-    apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update && apt-get install -y --no-install-recommends \
-    libgomp1 libopenblas0 libusb-1.0-0 \
+    apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o Acquire::https::Verify-Peer=false -o Acquire::https::Verify-Host=false update && \
+    apt-get install -y --fix-missing --no-install-recommends \
+    ca-certificates libgomp1 libopenblas0 libusb-1.0-0 \
     python3 python3-pip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 

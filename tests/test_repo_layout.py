@@ -34,7 +34,7 @@ def test_repo_has_pytest_harness() -> None:
     assert "[tool.pytest.ini_options]" in text
 
 
-def test_main_dockerfile_is_not_hardcoded_to_arm_ports_mirror() -> None:
+def test_main_dockerfile_bootstraps_https_apt_before_ca_certificates_exist() -> None:
     text = Path("Dockerfile").read_text()
 
     assert "ARG TARGETARCH" in text
@@ -42,7 +42,9 @@ def test_main_dockerfile_is_not_hardcoded_to_arm_ports_mirror() -> None:
     assert "archive.ubuntu.com/ubuntu" in text
     assert 'if [ "$TARGETARCH" = "arm64" ]' in text
     assert "https://archive.ubuntu.com/ubuntu" in text
-    assert 'apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update' in text
+    assert "Acquire::https::Verify-Peer=false" in text
+    assert "Acquire::https::Verify-Host=false" in text
+    assert "ca-certificates" in text
 
 
 def test_baked_model_dockerfile_copies_release_backed_assets() -> None:

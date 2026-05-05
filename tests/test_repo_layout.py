@@ -37,12 +37,12 @@ def test_repo_has_pytest_harness() -> None:
 def test_main_dockerfile_installs_pinned_jellyfin_ffmpeg_packages() -> None:
     text = Path("Dockerfile").read_text()
 
+    assert "ARG FFMPEG_ONNX_BOOTSTRAP_IMAGE=ghcr.io/treehorn-dev/ffmpeg-onnx:baked-latest" in text
+    assert "FROM ${FFMPEG_ONNX_BOOTSTRAP_IMAGE}" in text
     assert "ARG TARGETARCH" in text
     assert "JELLYFIN_FFMPEG_VERSION" in text
-    assert "jellyfin-ffmpeg7_${JELLYFIN_FFMPEG_VERSION}-jammy_${TARGETARCH}.deb" in text
-    assert "github.com/jellyfin/jellyfin-ffmpeg/releases/download" in text
-    assert "apt-get install -y --fix-missing --no-install-recommends /tmp/jellyfin-ffmpeg7.deb" in text
-    assert "pip3 install --no-cache-dir numpy opencv-python-headless openvino" in text
+    assert "rm -f /models/nudenet.onnx /models/labels.txt" in text
+    assert "pip3 install --no-cache-dir --upgrade numpy opencv-python-headless openvino" in text
     assert "./configure" not in text
     assert "make -j$(nproc) install" not in text
 
